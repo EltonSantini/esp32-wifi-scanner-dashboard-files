@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <title>ESP32 Wi-Fi Scanner Dashboard</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; }
+    table { border-collapse: collapse; width: 100%; }
+    th, td { padding: 8px; border: 1px solid #ccc; text-align: left; }
+    th { background: #f0f0f0; }
+  </style>
+</head>
+<body>
+  <h1>Wi-Fi Scan Results</h1>
+  <p>Reading from <code>/scans</code> endpoint (backend server).</p>
+  <button onclick="loadScans()">Refresh</button>
+
+  <table id="scan-table">
+    <thead>
+      <tr>
+        <th>Received At</th>
+        <th>SSID</th>
+        <th>BSSID</th>
+        <th>RSSI</th>
+        <th>Channel</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+
+  <script>
+    async function loadScans() {
+      const res = await fetch("http://localhost:5000/scans");
+      const scans = await res.json();
+      const tbody = document.querySelector("#scan-table tbody");
+      tbody.innerHTML = "";
+
+      scans.forEach(scan => {
+        (scan.networks || []).forEach(net => {
+          const tr = document.createElement("tr");
+          tr.innerHTML = `
+            <td>${scan.received_at || ""}</td>
+            <td>${net.ssid || ""}</td>
+            <td>${net.bssid || ""}</td>
+            <td>${net.rssi || ""}</td>
+            <td>${net.channel || ""}</td>
+          `;
+          tbody.appendChild(tr);
+        });
+      });
+    }
+
+    loadScans();
+  </script>
+</body>
+</html>

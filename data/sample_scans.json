@@ -1,0 +1,13 @@
+[
+  {
+    "received_at": "2025-01-01T00:00:00Z",
+    "networks": [
+      {
+        "ssid": "ExampleWiFi",
+        "bssid": "AA:BB:CC:DD:EE:FF",
+        "rssi": -55,
+        "channel": 6
+      }
+    ]
+  }
+]
